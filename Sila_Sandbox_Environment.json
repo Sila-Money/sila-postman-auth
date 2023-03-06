@@ -1,10 +1,10 @@
 {
-	"id": "a5d6fcb6-8163-4393-a8c2-38c2eaf126bd",
-	"name": "JWT / AuthToken",
+	"id": "c340de36-1cfe-4a2b-81e0-f1385197b0d0",
+	"name": "Sila API v0.2 - Auth Token",
 	"values": [
 		{
 			"key": "backend_url",
-			"value": "http://localhost:8002",
+			"value": "https://sandbox.silamoney.com",
 			"enabled": true
 		},
 		{
@@ -84,6 +84,6 @@
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2022-12-21T01:23:45.064Z",
-	"_postman_exported_using": "Postman/8.12.5"
+	"_postman_exported_at": "2023-03-06T23:55:29.159Z",
+	"_postman_exported_using": "Postman/10.9.3"
 }
