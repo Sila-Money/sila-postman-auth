@@ -1,11 +1,59 @@
 {
 	"info": {
-		"_postman_id": "f9f3eba6-6c4a-40f2-a7dc-8980e29fd248",
-		"name": "Sila API v0.2 - JWT OAuth Edition",
-		"description": "These endpoints are designed to work with our lightweight local proxy server. The local server signs and forwards requests to the main API host.\n\nAuthentication of requests made to the main API host is performed using ETH signatures. For more information, visit our docs at https://docs.silamoney.com/docs/process-overview.\n",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "4c4cd57e-6623-4889-884a-dd8c28a26528",
+		"name": "Sila API v0.2 -Auth Token",
+		"description": "## Environment Setup\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nCall /get_access_token in the Authentication folder first. Set the return token value to the jwt_token value in the environment.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12583005"
 	},
 	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get Authentication Token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{app_client_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{app_client_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\": \"{{$timestamp}}\",\n        \"auth_handle\": \"{{app_handle}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/auth_token",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"auth_token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Entities",
 			"item": [
@@ -4465,67 +4513,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Get Authentication Token",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "{{app_client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "{{app_client_id}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"header\": {\n        \"created\": \"{{$timestamp}}\",\n        \"auth_handle\": \"{{app_handle}}\"\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{backend_url}}/0.2/auth_token",
-					"host": [
-						"{{backend_url}}"
-					],
-					"path": [
-						"0.2",
-						"auth_token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Proxy Helper: Generate Private Key",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{backend_url}}/0.2/generate_private_key",
-					"host": [
-						"{{backend_url}}"
-					],
-					"path": [
-						"0.2",
-						"generate_private_key"
-					]
-				},
-				"description": "Generates a private key/address pair (ETH). This is intended as a helper for testing purposes only."
-			},
-			"response": []
 		}
 	],
 	"auth": {
@@ -4556,64 +4543,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "host",
-			"value": "sandbox.silamoney.com"
-		},
-		{
-			"key": "proxy_port",
-			"value": "8181"
-		},
-		{
-			"key": "app_handle",
-			"value": ""
-		},
-		{
-			"key": "app_private_key",
-			"value": ""
-		},
-		{
-			"key": "user_handle",
-			"value": ""
-		},
-		{
-			"key": "user_address",
-			"value": ""
-		},
-		{
-			"key": "business_handle",
-			"value": ""
-		},
-		{
-			"key": "business_private_key",
-			"value": ""
-		},
-		{
-			"key": "business_address",
-			"value": ""
-		},
-		{
-			"key": "user_private_key2",
-			"value": ""
-		},
-		{
-			"key": "user_address2",
-			"value": ""
-		},
-		{
-			"key": "bank_account_name",
-			"value": ""
-		},
-		{
-			"key": "manual_bank_account_name",
-			"value": ""
-		},
-		{
-			"key": "user_private_key",
-			"value": ""
 		}
 	]
 }
