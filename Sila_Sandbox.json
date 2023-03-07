@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "4c4cd57e-6623-4889-884a-dd8c28a26528",
 		"name": "Sila API v0.2 -Auth Token",
-		"description": "## Environment Setup\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nCall /get_access_token in the Authentication folder first. Set the return token value to the jwt_token value in the environment.",
+		"description": "## Environment Setup\n\nBegin with setting up your environment with the three variables listed below. You can retrieve your app_handle and app_client_id in the Sila Console. The app_client_secret was provided when creating your app.\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nAfterwards, call Get Authentication Token endpoint in the Authentication folder to receive access token. Set the return token value to the jwt_token value in the environment.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "12583005"
 	},
@@ -52,7 +52,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "For more information on our /auth_token endpoint, please visit [https://docs.silamoney.com/docs/auth_token](https://docs.silamoney.com/docs/auth_token)."
 		},
 		{
 			"name": "Entities",
