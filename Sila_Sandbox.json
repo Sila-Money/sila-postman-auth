@@ -3366,7 +3366,7 @@
 								}
 							]
 						},
-						"description": "Initiates a transaction which burns a given amount (in Sila) from the ETH wallet used to sign the request and credits the bank account, identified by its account_name, the given amount (in cents)."
+						"description": "This is the reverse process of /issue_sila; tokens are removed from the provided wallet or virtual account, then the process of initiating an ACH Credit transaction to the linked bank account is started."
 					},
 					"response": []
 				},
@@ -3429,7 +3429,7 @@
 								}
 							]
 						},
-						"description": "Initiates a transaction which transfers a given amount (in Sila) from the ETH wallet used to sign the request to the handle and wallet specified in the request. If there is no wallet nickname or wallet address in the request, the receiver's default wallet is selected as the destination."
+						"description": "This request triggers a transfer of SILA tokens over the blockchain, going from the current authenticated user to the specified destination handle."
 					},
 					"response": []
 				},
