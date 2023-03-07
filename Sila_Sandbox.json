@@ -348,26 +348,6 @@
 						{
 							"name": "Add Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -396,7 +376,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"email\": \"another.user@email.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"email\": \"another.user@email.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -404,14 +384,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"email"
 									],
 									"query": [
 										{
@@ -419,10 +399,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_email"
 										}
 									]
 								},
@@ -433,26 +409,6 @@
 						{
 							"name": "Add Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -481,7 +437,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9876\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9876\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -489,14 +445,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"phone"
 									],
 									"query": [
 										{
@@ -504,10 +460,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_phone"
 										}
 									]
 								},
@@ -518,26 +470,6 @@
 						{
 							"name": "Add Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -566,7 +498,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -574,14 +506,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"identity"
 									],
 									"query": [
 										{
@@ -589,10 +521,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_identity"
 										}
 									]
 								},
@@ -603,26 +531,6 @@
 						{
 							"name": "Add Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -651,7 +559,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -659,14 +567,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"address"
 									],
 									"query": [
 										{
@@ -674,10 +582,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_address"
 										}
 									]
 								},
@@ -688,26 +592,6 @@
 						{
 							"name": "Update Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -736,7 +620,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"email\": \"another.user@email.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"email\": \"another.user@email.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -744,14 +628,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"email"
 									],
 									"query": [
 										{
@@ -759,10 +643,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_email"
 										}
 									]
 								},
@@ -773,26 +653,6 @@
 						{
 							"name": "Update Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -821,7 +681,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"phone\": \"321-123-9876\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"phone\": \"321-123-9876\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -829,14 +689,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"phone"
 									],
 									"query": [
 										{
@@ -844,10 +704,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_phone"
 										}
 									]
 								},
@@ -858,26 +714,6 @@
 						{
 							"name": "Update Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -906,7 +742,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -914,14 +750,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"identity"
 									],
 									"query": [
 										{
@@ -929,10 +765,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_identity"
 										}
 									]
 								},
@@ -943,26 +775,6 @@
 						{
 							"name": "Update Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -991,7 +803,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -999,14 +811,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"address"
 									],
 									"query": [
 										{
@@ -1014,10 +826,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_address"
 										}
 									]
 								},
@@ -1028,26 +836,6 @@
 						{
 							"name": "Update Entity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -1076,7 +864,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"first_name\": \"Newfirst\",\n    \"last_name\": \"Newlast\",\n    \"entity_name\": \"New Full Name\",\n    \"birthdate\": \"2000-12-31\",\n    \"business_type\": \"llc\",\n    \"naics_code\": 721,\n    \"doing_business_as\": \"New Business Alias\",\n    \"business_website\": \"https://www.silamoney.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"first_name\": \"Newfirst\",\n    \"last_name\": \"Newlast\",\n    \"entity_name\": \"New Full Name\",\n    \"birthdate\": \"2000-12-31\",\n    \"business_type\": \"llc\",\n    \"naics_code\": 721,\n    \"doing_business_as\": \"New Business Alias\",\n    \"business_website\": \"https://www.silamoney.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1084,14 +872,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_entity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/entity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"entity"
 									],
 									"query": [
 										{
@@ -1099,10 +887,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_entity"
 										}
 									]
 								},
@@ -1113,26 +897,6 @@
 						{
 							"name": "Delete Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -1161,7 +925,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1169,14 +933,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"email"
 									],
 									"query": [
 										{
@@ -1184,10 +948,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_email"
 										}
 									]
 								},
@@ -1198,26 +958,6 @@
 						{
 							"name": "Delete Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -1246,7 +986,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1254,14 +994,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"phone"
 									],
 									"query": [
 										{
@@ -1269,10 +1009,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_phone"
 										}
 									]
 								},
@@ -1283,26 +1019,6 @@
 						{
 							"name": "Delete Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -1331,7 +1047,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1339,14 +1055,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"identity"
 									],
 									"query": [
 										{
@@ -1354,10 +1070,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_identity"
 										}
 									]
 								},
@@ -1368,26 +1080,6 @@
 						{
 							"name": "Delete Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -1416,7 +1108,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1424,14 +1116,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"address"
 									],
 									"query": [
 										{
@@ -1439,10 +1131,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_address"
 										}
 									]
 								},
