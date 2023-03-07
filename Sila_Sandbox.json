@@ -437,7 +437,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9876\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9874\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2868,7 +2868,7 @@
 								}
 							]
 						},
-						"description": "Gets list of blockchain addresses registered to the given entity."
+						"description": "Gets list of wallets registered to the given entity."
 					},
 					"response": []
 				},
@@ -2931,7 +2931,7 @@
 								}
 							]
 						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
+						"description": "Gets details about the wallet whose wallet_id was provided in the request. Includes balance and whether wallet is whitelisted."
 					},
 					"response": []
 				},
@@ -2994,7 +2994,7 @@
 								}
 							]
 						},
-						"description": "Allows updating nickname and default status of the wallet used to sign the request."
+						"description": "Allows updating nickname and default status of the wallet provided."
 					},
 					"response": []
 				},
@@ -3057,7 +3057,7 @@
 								}
 							]
 						},
-						"description": "Allows an entity to have a second wallet registered. Requires a valid verification signature."
+						"description": "Allows an entity to have a second wallet registered."
 					},
 					"response": []
 				},
@@ -3109,49 +3109,7 @@
 								}
 							]
 						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Sila Balance (JWT)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_sila_balance",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_sila_balance"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
+						"description": "Note: Get Sila Balance is not compatiable with Auth.\n\nIf using Auth, please use /get_wallet to get wallet balance."
 					},
 					"response": []
 				},
@@ -3214,7 +3172,7 @@
 								}
 							]
 						},
-						"description": "Allows updating nickname and default status of the wallet used to sign the request."
+						"description": "This endpoint allows deletion of a user's wallet. This action cannot be performed on a user's only wallet, a user's default destination wallet, or an a wallet with a non-zero balance."
 					},
 					"response": []
 				}
