@@ -3429,7 +3429,7 @@
 								}
 							]
 						},
-						"description": "This request triggers a transfer of SILA tokens over the blockchain, going from the current authenticated user to the specified destination handle."
+						"description": "This request triggers a transfer of SILA tokens, going from the current authenticated user to the specified destination handle."
 					},
 					"response": []
 				},
@@ -3491,7 +3491,8 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Cancel a pending Issue and Redeem Sila transaction under certain circumstances\n\n[  \n](https://docs.silamoney.com/edit/cancel_transaction)"
 					},
 					"response": []
 				},
