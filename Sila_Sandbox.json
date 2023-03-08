@@ -127,7 +127,7 @@
 										}
 									]
 								},
-								"description": "Upload documents by posting to this endpoint, which uses a multipart/form-data content type; the \"data\" field contains JSON metadata.\n\nIf you are using the signer-server, you can set the \"x-set-file-hash\" header to \"hash\", and the signer-server will generate the hash for you.\n\nIf you're not using the signer-server, you will need to generate the file hash with SHA256 and include it in the request."
+								"description": "Upload documents by posting to this endpoint, which uses a multipart/form-data content type; the \"data\" field contains JSON metadata.\n\nIf you are using Auth, you will need to generate the file hash with SHA256 and include it in the request."
 							},
 							"response": []
 						},
@@ -1767,7 +1767,7 @@
 								}
 							]
 						},
-						"description": "Requests identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
+						"description": "Requests identity verification allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
 					},
 					"response": []
 				},
@@ -1830,7 +1830,7 @@
 								}
 							]
 						},
-						"description": "Checks status of identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business)."
+						"description": "Checks status of identity verification allowlisting for the given user_handle (can belong to an individual or a business)."
 					},
 					"response": []
 				},
@@ -2081,7 +2081,7 @@
 								}
 							]
 						},
-						"description": "Checks status of identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business)."
+						"description": "Checks status of identity verification allowlisting for the given user_handle (can belong to an individual or a business)."
 					},
 					"response": []
 				}
