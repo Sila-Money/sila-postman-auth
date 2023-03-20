@@ -38,8 +38,8 @@ Before you start making requests through Postman, you'll want to set some of the
 
 ## ENVIRONMENT SETUP
 Begin with setting up your environment with the three variables listed below. You can retrieve your app_handle and app_client_id in the [Sila Console](https://console.silamoney.com/). The app_client_secret was provided when creating your app. For more details on how to access this information please visit our [Application Management](https://docs.silamoney.com/docs/console-application-management) documents.
-* app_handle
-* app_client_id
-* app_client_secret
+* `app_handle`
+* `app_client_id`
+* `app_client_secret`
 
 Afterwards, call the Get Authentication Token endpoint in the Authentication folder to receive the access token. Set the return token value to the `jwt_token` value in the environment. This will enable you to make successful requests for the other Sila Endpoints.
