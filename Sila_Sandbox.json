@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8d8a58b6-3afb-427d-b692-1e58962c1785",
+		"_postman_id": "30a3d5ae-55a0-4850-9227-e4947aeca289",
 		"name": "Sila API v0.2 - JWT OAuth Edition",
 		"description": "These endpoints are designed to work with our lightweight local proxy server. The local server signs and forwards requests to the main API host.\n\nAuthentication of requests made to the main API host is performed using ETH signatures. For more information, visit our docs at https://docs.silamoney.com/docs/process-overview.\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -4471,7 +4471,7 @@
 			"name": "Cards",
 			"item": [
 				{
-					"name": "Add Cards",
+					"name": "Add Card",
 					"event": [
 						{
 							"listen": "test",
@@ -4687,7 +4687,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Testing Token",
+					"name": "Create CKO Testing Token",
 					"event": [
 						{
 							"listen": "test",
@@ -4719,7 +4719,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\"\n    },\n    \"type\": \"card\",\n    \"number\": 4659105569051157,\n    \"expiry_month\": 12, \n    \"expiry_year\": 2027,\n    \"cvv\": 956\n}",
+							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\"\n    },\n    \"type\": \"card\",\n    \"card_number\": 4659105569051157,\n    \"expiry_month\": 12, \n    \"expiry_year\": 2027,\n    \"cvv\": 956\n}",
 							"options": {
 								"raw": {
 									"language": "json"
