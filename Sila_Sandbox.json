@@ -1,12 +1,59 @@
 {
 	"info": {
-		"_postman_id": "30a3d5ae-55a0-4850-9227-e4947aeca289",
-		"name": "Sila API v0.2 - JWT OAuth Edition",
-		"description": "These endpoints are designed to work with our lightweight local proxy server. The local server signs and forwards requests to the main API host.\n\nAuthentication of requests made to the main API host is performed using ETH signatures. For more information, visit our docs at https://docs.silamoney.com/docs/process-overview.\n",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11558014"
+		"_postman_id": "11f85f77-360a-457f-9e06-090710332c41",
+		"name": "Sila API v0.2 -Auth Token",
+		"description": "## Environment Setup\n\nBegin with setting up your environment with the three variables listed below. You can retrieve your app_handle and app_client_id in the [Sila Console](https://console.silamoney.com/). The app_client_secret was provided when creating your app. For more details on how to access this information please visit our [Application Management documents](https://docs.silamoney.com/docs/console-application-management).\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nAfterwards, call the Get Authentication Token endpoint in the Authentication folder to receive access token. Set the return token value to the jwt_token value in the environment. This will enable you to make successful requests for the other Sila Endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get Authentication Token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{app_client_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{app_client_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\": \"{{$timestamp}}\",\n        \"auth_handle\": \"{{app_handle}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/auth_token",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"auth_token"
+							]
+						},
+						"description": "## Summary\n\nThis endpoint is called to request an access token which can be used to authorize subsequent requests. This access token will have an expiration time that is up to 8 hours in the future.\n\nFor more information on our /auth_token endpoint, please visit [https://docs.silamoney.com/docs/auth_token](https://docs.silamoney.com/docs/auth_token)."
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Entities",
 			"item": [
@@ -22,28 +69,6 @@
 										"key": "Content-Type",
 										"type": "text",
 										"value": "multipart/form-data"
-									},
-									{
-										"key": "x-forward-to-url",
-										"type": "text",
-										"value": "{{host}}/0.2/documents",
-										"disabled": true
-									},
-									{
-										"key": "x-set-epoch",
-										"type": "text",
-										"value": "header.created",
-										"disabled": true
-									},
-									{
-										"key": "x-set-file-hash",
-										"type": "text",
-										"value": "hash"
-									},
-									{
-										"key": "x-set-file-metadata",
-										"type": "text",
-										"value": "filename, mime_type"
 									}
 								],
 								"body": {
@@ -57,7 +82,7 @@
 										},
 										{
 											"key": "data",
-											"value": "{\"header\": {\"app_handle\":  \"{{app_handle}}\", \"user_handle\":  \"{{user_handle}}\"}, \"created\":{{$timestamp}},\"reference\":{{$timestamp}},\"filename\": \"your_file.jpg\", \"hash\": \"\", \"mime_type\": \"image/jpeg\", \"document_type\": \"id_drivers_license\", \"identity_type\": \"license\"}",
+											"value": "{\"header\": {\"app_handle\":  \"{{app_handle}}\", \"user_handle\":  \"{{user_handle}}\", \"created\":{{$timestamp}}},\"reference\":{{$timestamp}},\"filename\": \"your_file.jpg\", \"hash\": \"\", \"mime_type\": \"image/jpeg\", \"document_type\": \"id_drivers_license\", \"identity_type\": \"license\"}",
 											"type": "text"
 										}
 									]
@@ -79,7 +104,7 @@
 										}
 									]
 								},
-								"description": "Upload documents by posting to this endpoint, which uses a multipart/form-data content type; the \"data\" field contains JSON metadata.\n\nIf you are using the signer-server, you can set the \"x-set-file-hash\" header to \"hash\", and the signer-server will generate the hash for you.\n\nIf you're not using the signer-server, you will need to generate the file hash with SHA256 and include it in the request."
+								"description": "Upload documents by posting to this endpoint, which uses a multipart/form-data content type; the \"data\" field contains JSON metadata.\n\nIf you are using Auth, you will need to generate the file hash with SHA256 and include it in the request."
 							},
 							"response": []
 						},
@@ -92,27 +117,6 @@
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/list_documents",
-										"disabled": true
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created",
-										"disabled": true
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference",
-										"disabled": true
 									}
 								],
 								"body": {
@@ -165,27 +169,6 @@
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/document_types",
-										"disabled": true
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created",
-										"disabled": true
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference",
-										"disabled": true
 									}
 								],
 								"body": {
@@ -238,27 +221,6 @@
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/get_document",
-										"disabled": true
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created",
-										"disabled": true
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference",
-										"disabled": true
 									}
 								],
 								"body": {
@@ -300,55 +262,17 @@
 						{
 							"name": "Add Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/add/email"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"email\": \"another.user@email.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"email\": \"another.user@email.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -356,14 +280,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"email"
 									],
 									"query": [
 										{
@@ -371,10 +295,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_email"
 										}
 									]
 								},
@@ -385,55 +305,17 @@
 						{
 							"name": "Add Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/add/phone"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9876\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"phone\": \"321-123-9874\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -441,14 +323,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"phone"
 									],
 									"query": [
 										{
@@ -456,10 +338,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_phone"
 										}
 									]
 								},
@@ -470,55 +348,17 @@
 						{
 							"name": "Add Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/add/identity"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -526,14 +366,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"identity"
 									],
 									"query": [
 										{
@@ -541,10 +381,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_identity"
 										}
 									]
 								},
@@ -555,55 +391,17 @@
 						{
 							"name": "Add Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/add/address"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -611,14 +409,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=add_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/add/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"add",
+										"address"
 									],
 									"query": [
 										{
@@ -626,10 +424,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "add_address"
 										}
 									]
 								},
@@ -640,55 +434,17 @@
 						{
 							"name": "Update Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/update/email"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"email\": \"another.user@email.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"email\": \"another.user@email.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -696,14 +452,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"email"
 									],
 									"query": [
 										{
@@ -711,10 +467,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_email"
 										}
 									]
 								},
@@ -725,55 +477,17 @@
 						{
 							"name": "Update Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/update/phone"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"phone\": \"321-123-9876\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"phone\": \"321-123-9876\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -781,14 +495,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"phone"
 									],
 									"query": [
 										{
@@ -796,10 +510,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_phone"
 										}
 									]
 								},
@@ -810,55 +520,17 @@
 						{
 							"name": "Update Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/update/identity"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"identity_alias\": \"SSN\",\n    \"identity_value\": \"123452222\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -866,14 +538,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"identity"
 									],
 									"query": [
 										{
@@ -881,10 +553,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_identity"
 										}
 									]
 								},
@@ -895,55 +563,17 @@
 						{
 							"name": "Update Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/update/address"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\",\n    \"address_alias\": \"\",\n    \"street_address_1\": \"324 Songbird Avenue\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"postal_code\": \"12345\",\n    \"country\": \"US\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -951,14 +581,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"address"
 									],
 									"query": [
 										{
@@ -966,10 +596,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_address"
 										}
 									]
 								},
@@ -980,55 +606,17 @@
 						{
 							"name": "Update Entity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/update/entity"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"first_name\": \"Newfirst\",\n    \"last_name\": \"Newlast\",\n    \"entity_name\": \"New Full Name\",\n    \"birthdate\": \"2000-12-31\",\n    \"business_type\": \"llc\",\n    \"naics_code\": 721,\n    \"doing_business_as\": \"New Business Alias\",\n    \"business_website\": \"https://www.silamoney.com\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"first_name\": \"Newfirst\",\n    \"last_name\": \"Newlast\",\n    \"entity_name\": \"New Full Name\",\n    \"birthdate\": \"2000-12-31\",\n    \"business_type\": \"llc\",\n    \"naics_code\": 721,\n    \"doing_business_as\": \"New Business Alias\",\n    \"business_website\": \"https://www.silamoney.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1036,14 +624,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=update_entity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/update/entity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"update",
+										"entity"
 									],
 									"query": [
 										{
@@ -1051,10 +639,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "update_entity"
 										}
 									]
 								},
@@ -1065,55 +649,17 @@
 						{
 							"name": "Delete Email",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/delete/email"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1121,14 +667,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_email",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/email",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"email"
 									],
 									"query": [
 										{
@@ -1136,10 +682,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_email"
 										}
 									]
 								},
@@ -1150,55 +692,17 @@
 						{
 							"name": "Delete Phone",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/delete/phone"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1206,14 +710,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_phone",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/phone",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"phone"
 									],
 									"query": [
 										{
@@ -1221,10 +725,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_phone"
 										}
 									]
 								},
@@ -1235,55 +735,17 @@
 						{
 							"name": "Delete Identity",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/delete/identity"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1291,14 +753,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_identity",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/identity",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"identity"
 									],
 									"query": [
 										{
@@ -1306,10 +768,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_identity"
 										}
 									]
 								},
@@ -1320,55 +778,17 @@
 						{
 							"name": "Delete Address",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "private-key; Authsignature={{app_private_key}}; Usersignature={{user_private_key}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										},
-										{
-											"key": "in",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"description": "Forwards to this endpoint on main API host.",
-										"key": "X-Forward-To-URL",
-										"type": "text",
-										"value": "{{host}}/0.2/delete/address"
-									},
-									{
-										"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-										"key": "X-Set-Epoch",
-										"type": "text",
-										"value": "header.created"
-									},
-									{
-										"description": "Sets a random UUID4 string on specified JSON key.",
-										"key": "X-Set-UUID",
-										"type": "text",
-										"value": "header.reference"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
+									"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"uuid\": \"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1376,14 +796,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:{{proxy_port}}/forward?label=delete_address",
-									"protocol": "http",
+									"raw": "{{backend_url}}/0.2/delete/address",
 									"host": [
-										"localhost"
+										"{{backend_url}}"
 									],
-									"port": "{{proxy_port}}",
 									"path": [
-										"forward"
+										"0.2",
+										"delete",
+										"address"
 									],
 									"query": [
 										{
@@ -1391,10 +811,6 @@
 											"value": "true",
 											"description": "Requests that proxy send back debug information about request and response.",
 											"disabled": true
-										},
-										{
-											"key": "label",
-											"value": "delete_address"
 										}
 									]
 								},
@@ -1414,27 +830,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_payment_methods",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1477,27 +872,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/check_handle",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1527,7 +901,7 @@
 								}
 							]
 						},
-						"description": "Checks availability of a handle to see if it can be registered by an entity (business or individual)."
+						"description": "Checks availability of a user handle to see if it can be registered by an entity (business or individual)."
 					},
 					"response": []
 				},
@@ -1540,32 +914,11 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_entities",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": {{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    }\n}",
+							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": {{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1603,27 +956,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/register",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1666,27 +998,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/register",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1729,27 +1040,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_entity",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1792,27 +1082,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_entity",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1855,27 +1124,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/link_business_member",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1918,27 +1166,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/unlink_business_member",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -1981,27 +1208,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/request_kyc",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2031,7 +1237,7 @@
 								}
 							]
 						},
-						"description": "Requests identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
+						"description": "Requests identity verification allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
 					},
 					"response": []
 				},
@@ -2044,27 +1250,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/check_kyc",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2094,7 +1279,7 @@
 								}
 							]
 						},
-						"description": "Checks status of identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business)."
+						"description": "Checks status of identity verification allowlisting for the given user_handle (can belong to an individual or a business)."
 					},
 					"response": []
 				},
@@ -2107,27 +1292,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/certify_beneficial_owner",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2170,27 +1334,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/certify_business",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2238,27 +1381,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/check_kyc_app",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2295,27 +1417,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/check_partner_kyc",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2345,7 +1446,40 @@
 								}
 							]
 						},
-						"description": "Checks status of identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business)."
+						"description": "Checks status of identity verification allowlisting for the given user_handle (can belong to an individual or a business)."
+					},
+					"response": []
+				},
+				{
+					"name": "Required Document Types",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/check_kyc/{{verification_id}}/required_document_types",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"check_kyc",
+								"{{verification_id}}",
+								"required_document_types"
+							]
+						}
 					},
 					"response": []
 				}
@@ -2363,27 +1497,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_accounts",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2426,27 +1539,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_account_balance",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2489,27 +1581,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/link_account",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2544,7 +1615,7 @@
 					"response": []
 				},
 				{
-					"name": "Link Bank Account (Manual)",
+					"name": "Link Bank Account (Manual) - FOR TESTING ONLY",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2552,27 +1623,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/link_account",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2602,7 +1652,7 @@
 								}
 							]
 						},
-						"description": "Links a bank account with account and routing number to the user_handle."
+						"description": "FOR TESTING PURPOSES ONLY, does not verify account information. Links a bank account with account and routing number to the user_handle."
 					},
 					"response": []
 				},
@@ -2616,27 +1666,6 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/delete_account",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
-							},
 							{
 								"key": "Content-Type",
 								"type": "text",
@@ -2673,27 +1702,6 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/update_account",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
-							},
 							{
 								"key": "Content-Type",
 								"value": "application/json",
@@ -2739,27 +1747,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/plaid_link_token",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2788,7 +1775,7 @@
 					"response": []
 				},
 				{
-					"name": "Plaid Sameday Auth",
+					"name": "Plaid Same-day Auth",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2796,27 +1783,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/plaid_sameday_auth",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2853,27 +1819,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/plaid_update_link_token",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2910,24 +1855,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/get_institutions",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -2953,27 +1880,6 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/check_instant_ach",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
-							},
 							{
 								"key": "Content-Type",
 								"value": "application/json",
@@ -3014,27 +1920,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_payment_methods",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3082,27 +1967,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_wallets",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3132,7 +1996,7 @@
 								}
 							]
 						},
-						"description": "Gets list of blockchain addresses registered to the given entity."
+						"description": "Gets list of wallets registered to the given entity."
 					},
 					"response": []
 				},
@@ -3145,27 +2009,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_wallet",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3195,7 +2038,7 @@
 								}
 							]
 						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
+						"description": "Gets details about the wallet whose wallet_id was provided in the request. Includes balance and whether wallet is whitelisted."
 					},
 					"response": []
 				},
@@ -3208,27 +2051,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/update_wallet",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3258,7 +2080,7 @@
 								}
 							]
 						},
-						"description": "Allows updating nickname and default status of the wallet used to sign the request."
+						"description": "Allows updating nickname and default status of the wallet provided."
 					},
 					"response": []
 				},
@@ -3271,27 +2093,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/register_wallet",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3321,101 +2122,7 @@
 								}
 							]
 						},
-						"description": "Allows an entity to have a second wallet registered. Requires a valid verification signature."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Sila Balance (No auth)",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_sila_balance",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"address\": \"{{user_address}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_sila_balance",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_sila_balance"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Sila Balance (JWT)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_sila_balance",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_sila_balance"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Gets details about the wallet used to sign the request. Includes balance and whether wallet is whitelisted."
+						"description": "Allows an entity to have a second wallet registered."
 					},
 					"response": []
 				},
@@ -3428,27 +2135,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/delete_wallet",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3478,7 +2164,7 @@
 								}
 							]
 						},
-						"description": "Allows updating nickname and default status of the wallet used to sign the request."
+						"description": "This endpoint allows deletion of a user's wallet. This action cannot be performed on a user's only wallet, a user's default destination wallet, or an a wallet with a non-zero balance."
 					},
 					"response": []
 				}
@@ -3496,32 +2182,11 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_transactions",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"search_filters\": {\n    \"transaction_id\": \"{{some UUID string assigned by Sila}}\",    \n    \"show_timelines\": true,\n    \"sort_ascending\": false,\n    \"max_sila_amount\": \"{{transaction max amount}}\",\n    \"min_sila_amount\": \"{{transaction min amount}}\",\n    \"statuses\": [\"queued\", \"pending\", \"failed\", \"success\", \"rollback\", \"review\"],\n    \"start_epoch\": \"{{transaction start time}}\",\n    \"end_epoch\": \"{{transaction end time}}\",\n    \"page\": 1,\n    \"per_page\": 20,\n    \"transaction_types\": \"{{transaction type}}\",\n    \"bank_account_name\": \"{{bank_account_name}}\",\n    \"blockchain_address\": \"{{blockchain_address_of_the_wallet}}\",\n    \"destination_id\": \"UUID of destination PaymentInstrument\",\n    \"source_id\": \"UUID of source PaymentInstrument\",\n    \"effective_date\": {{effective_date of transaction}},\n    \"effective_epoch\": {{effective_epoch of transaction}},\n    \"payment_method_id\" : \"UUID of virtual account id\"\n  }\n}",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"search_filters\": {\n    \"transaction_id\": \"{{some UUID string assigned by Sila}}\",    \n    \"show_timelines\": true,\n    \"sort_ascending\": false,\n    \"max_sila_amount\": \"{{transaction max amount}}\",\n    \"min_sila_amount\": \"{{transaction min amount}}\",\n    \"statuses\": [\"queued\", \"pending\", \"failed\", \"success\", \"rollback\", \"review\"],\n    \"start_epoch\": \"{{transaction start time}}\",\n    \"end_epoch\": \"{{transaction end time}}\",\n    \"page\": 1,\n    \"per_page\": 20,\n    \"transaction_types\": \"{{transaction type}}\",\n    \"bank_account_name\": \"{{bank_account_name}}\",\n    \"blockchain_address\": \"{{blockchain_address_of_the_wallet}}\",\n    \"destination_id\": \"UUID of destination PaymentInstrument\",\n    \"source_id\": \"UUID of source PaymentInstrument\",\n    \"effective_date\": \"{{effective_date of transaction}}\",\n    \"effective_epoch\": 946684800,\n    \"payment_method_id\" : \"UUID of virtual account id\"\n  }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3559,27 +2224,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/issue_sila",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3622,27 +2266,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/redeem_sila",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3672,7 +2295,7 @@
 								}
 							]
 						},
-						"description": "Initiates a transaction which burns a given amount (in Sila) from the ETH wallet used to sign the request and credits the bank account, identified by its account_name, the given amount (in cents)."
+						"description": "This is the reverse process of /issue_sila; tokens are removed from the provided wallet or virtual account, then the process of initiating an ACH Credit transaction to the linked bank account is started."
 					},
 					"response": []
 				},
@@ -3685,27 +2308,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/transfer_sila",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3735,7 +2337,7 @@
 								}
 							]
 						},
-						"description": "Initiates a transaction which transfers a given amount (in Sila) from the ETH wallet used to sign the request to the handle and wallet specified in the request. If there is no wallet nickname or wallet address in the request, the receiver's default wallet is selected as the destination."
+						"description": "This request triggers a transfer of SILA tokens, going from the current authenticated user to the specified destination handle."
 					},
 					"response": []
 				},
@@ -3748,27 +2350,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/cancel_transaction",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3797,7 +2378,8 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Cancel a pending Issue and Redeem Sila transaction under certain circumstances\n\n[  \n](https://docs.silamoney.com/edit/cancel_transaction)"
 					},
 					"response": []
 				},
@@ -3810,27 +2392,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/create_test_virtual_account_ach_transaction",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3878,27 +2439,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_business_types",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -3941,27 +2481,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_business_roles",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4004,27 +2523,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_naics_categories",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4073,24 +2571,6 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/get_webhooks",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4119,24 +2599,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/retry_webhook",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4171,27 +2633,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_virtual_accounts",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4234,27 +2675,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/open_virtual_account",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4297,27 +2717,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_virtual_account",
-								"disabled": true
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created",
-								"disabled": true
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -4360,24 +2759,6 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"description": "Forwards to this endpoint on main API host.",
-								"key": "X-Forward-To-URL",
-								"type": "text",
-								"value": "{{host}}/0.2/get_virtual_account"
-							},
-							{
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"key": "X-Set-Epoch",
-								"type": "text",
-								"value": "header.created"
-							},
-							{
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"key": "X-Set-UUID",
-								"type": "text",
-								"value": "header.reference"
 							}
 						],
 						"body": {
@@ -4417,30 +2798,9 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "X-Forward-To-URL",
-								"value": "{{host}}/0.2/close_virtual_account",
-								"description": "Forwards to this endpoint on main API host.",
-								"type": "text"
-							},
-							{
-								"key": "X-Set-Epoch",
-								"value": "header.created",
-								"description": "Sets epoch on specified JSON key. (Dots indicate nested dictionaries.)",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-Set-UUID",
-								"value": "header.reference",
-								"description": "Sets a random UUID4 string on specified JSON key.",
-								"type": "text",
-								"disabled": true
-							},
-							{
 								"key": "Content-Type",
-								"value": "application/json",
 								"type": "text",
-								"disabled": true
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -4503,7 +2863,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"card_name\": \"the_card\",\n    \"token\": \"__token__\",\n    \"provider\": \"cko\"\n}",
+							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"card_name\": \"the_card\",\n    \"token\": \"{{jwt_token}}\",\n    \"provider\": \"cko\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4743,65 +3103,93 @@
 			]
 		},
 		{
-			"name": "Get Authentication Token",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "{{app_client_secret}}",
-							"type": "string"
+			"name": "Statements",
+			"item": [
+				{
+					"name": "Get Statement Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"search_filters\": {\n    \"month\": \"01-2022\",\n    \"page\": 1,\n    \"per_page\": 100\n  }\n}"
 						},
-						{
-							"key": "username",
-							"value": "{{app_client_id}}",
-							"type": "string"
+						"url": {
+							"raw": "{{backend_url}}/0.2/get_statements_data",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"get_statements_data"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"header\": {\n        \"created\": \"{{$timestamp}}\",\n        \"auth_handle\": \"{{app_handle}}\"\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Get Wallet Statement Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"wallet_id\":\"<wallet_uuid>\",\n    \"search_filters\": {    \n    \"start_month\": \"07-2022\",\n    \"end_month\": \"08-2022\",\n    \"page\": 1,\n    \"per_page\": 100\n  }\n}"
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/get_wallet_statement_data",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"get_wallet_statement_data"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{backend_url}}/0.2/auth_token",
-					"host": [
-						"{{backend_url}}"
-					],
-					"path": [
-						"0.2",
-						"auth_token"
-					]
+				{
+					"name": "Get Statement Transactions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"wallet_id\":\"{{wallet_uuid}}\",\n    \"month\": \"03-2023\",\n    \"page\": 1,\n    \"per_page\": 100\n}"
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/get_statement_transactions",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"get_statement_transactions"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Proxy Helper: Generate Private Key",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{backend_url}}/0.2/generate_private_key",
-					"host": [
-						"{{backend_url}}"
-					],
-					"path": [
-						"0.2",
-						"generate_private_key"
-					]
-				},
-				"description": "Generates a private key/address pair (ETH). This is intended as a helper for testing purposes only."
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
@@ -4832,64 +3220,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "host",
-			"value": "sandbox.silamoney.com"
-		},
-		{
-			"key": "proxy_port",
-			"value": "8181"
-		},
-		{
-			"key": "app_handle",
-			"value": ""
-		},
-		{
-			"key": "app_private_key",
-			"value": ""
-		},
-		{
-			"key": "user_handle",
-			"value": ""
-		},
-		{
-			"key": "user_address",
-			"value": ""
-		},
-		{
-			"key": "business_handle",
-			"value": ""
-		},
-		{
-			"key": "business_private_key",
-			"value": ""
-		},
-		{
-			"key": "business_address",
-			"value": ""
-		},
-		{
-			"key": "user_private_key2",
-			"value": ""
-		},
-		{
-			"key": "user_address2",
-			"value": ""
-		},
-		{
-			"key": "bank_account_name",
-			"value": ""
-		},
-		{
-			"key": "manual_bank_account_name",
-			"value": ""
-		},
-		{
-			"key": "user_private_key",
-			"value": ""
 		}
 	]
 }
