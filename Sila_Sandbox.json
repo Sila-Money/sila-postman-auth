@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "11f85f77-360a-457f-9e06-090710332c41",
+		"_postman_id": "c7763f32-7285-48a7-8f53-b8d056df58b1",
 		"name": "Sila API v0.2 -Auth Token",
 		"description": "## Environment Setup\n\nBegin with setting up your environment with the three variables listed below. You can retrieve your app_handle and app_client_id in the [Sila Console](https://console.silamoney.com/). The app_client_secret was provided when creating your app. For more details on how to access this information please visit our [Application Management documents](https://docs.silamoney.com/docs/console-application-management).\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nAfterwards, call the Get Authentication Token endpoint in the Authentication folder to receive access token. Set the return token value to the jwt_token value in the environment. This will enable you to make successful requests for the other Sila Endpoints.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -960,7 +960,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address\": {\n\t\t\"address_alias\": \"Home\",\n\t\t\"street_address_1\": \"123 NW 1st Ave.\",\n\t\t\"city\": \"Portland\",\n\t\t\"state\": \"OR\",\n\t\t\"country\": \"US\",\n\t\t\"postal_code\": \"97200\"\n\t},\n\t\"identity\": {\n\t\t\"identity_alias\": \"SSN\",\n\t\t\"identity_value\": \"123-45-2222\"\n\t},\n\t\"entity\": {\n\t\t\"entity_name\": \"Postman User\",\n\t\t\"first_name\": \"Postman\",\n\t\t\"last_name\": \"User\",\n\t\t\"birthdate\": \"1990-01-31\"\n\t},\n\t\"contact\": {\n\t\t\"email\": \"postman@user.com\",\n\t\t\"phone\": \"1231231234\"\n\t}\n}",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":{{$timestamp}},\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"address\": {\n\t\t\"address_alias\": \"Home\",\n\t\t\"street_address_1\": \"123 NW 1st Ave.\",\n\t\t\"city\": \"Portland\",\n\t\t\"state\": \"OR\",\n\t\t\"country\": \"US\",\n\t\t\"postal_code\": \"97200\"\n\t},\n\t\"identity\": {\n\t\t\"identity_alias\": \"SSN\",\n\t\t\"identity_value\": \"123-45-2222\"\n\t},\n\t\"entity\": {\n\t\t\"entity_name\": \"Postman User\",\n\t\t\"first_name\": \"Postman\",\n\t\t\"last_name\": \"User\",\n\t\t\"birthdate\": \"1990-01-31\"\n\t},\n\t\"contact\": {\n\t\t\"email\": \"{{$randomEmail}}\",\n\t\t\"phone\": \"1231231234\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2384,6 +2384,47 @@
 					"response": []
 				},
 				{
+					"name": "Request Debit Card Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n  },\n  \"transaction_id\": \"{{transaction_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/refund_debit_card",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"refund_debit_card"
+							],
+							"query": [
+								{
+									"key": "debug",
+									"value": "true",
+									"description": "Requests that proxy send back debug information about request and response.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Test Virtual Account ACH Transaction",
 					"request": {
 						"method": "POST",
@@ -2863,7 +2904,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"card_name\": \"the_card\",\n    \"token\": \"{{jwt_token}}\",\n    \"provider\": \"cko\"\n}",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n  },\n  \"card_name\": \"the_card\",\n  \"token\": \"{{cko_token}}\",\n  \"provider\": \"cko\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2917,7 +2958,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n  \"card_type\": \"debit\"  \n}",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n  },\n  \"card_type\": \"debit\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2971,7 +3012,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"card_name\": \"the_card\",\n    \"provider\": \"cko\"\n}",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n  },\n  \"card_name\": \"the_card\",\n  \"provider\": \"cko\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3025,7 +3066,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"card_name\": \"the_updated_card\",\n    \"card_id\":\"b83a0b72-0a70-4b1c-a3b0-95e255b73903\"\n}",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n  },\n  \"card_name\": \"the_updated_card\",\n  \"card_id\": \"b83a0b72-0a70-4b1c-a3b0-95e255b73903\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3079,7 +3120,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"app_handle\": \"{{app_handle}}\"\n    },\n    \"type\": \"card\",\n    \"card_number\": 4659105569051157,\n    \"expiry_month\": 12, \n    \"expiry_year\": 2027,\n    \"cvv\": 956\n}",
+							"raw": "{\n  \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": {{$timestamp}},\n    \"app_handle\": \"{{app_handle}}\"\n  },\n  \"type\": \"card\",\n  \"card_number\": 4659105569051157,\n  \"expiry_month\": 12,\n  \"expiry_year\": 2027,\n  \"cvv\": 956\n}",
 							"options": {
 								"raw": {
 									"language": "json"

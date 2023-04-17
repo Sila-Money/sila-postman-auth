@@ -81,6 +81,16 @@
 			"key": "second_wallet_name",
 			"value": "",
 			"enabled": true
+		},
+		{
+			"key": "transaction_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "cko_token",
+			"value": "",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
