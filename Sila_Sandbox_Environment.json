@@ -91,6 +91,10 @@
 			"key": "cko_token",
 			"value": "",
 			"enabled": true
+		},{
+			"key": "cko_public_key",
+			"value": "",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
