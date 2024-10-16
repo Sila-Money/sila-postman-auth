@@ -2232,6 +2232,103 @@
 					"response": []
 				},
 				{
+					"name": "Get Transaction - by ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"search_filters\": {\n        \"transaction_id\": \"{{transaction_id}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/get_transactions",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"get_transactions"
+							],
+							"query": [
+								{
+									"key": "debug",
+									"value": "true",
+									"description": "Requests that proxy send back debug information about request and response.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Gets details about the transactions initiated with this user (issue, transfer, and redeem transactions)."
+					},
+					"response": []
+				},
+				{
+					"name": "Transact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseBody = pm.response.json();",
+									"var txn_id = responseBody.transaction_id;",
+									"pm.environment.set('transaction_id', txn_id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\":\"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"amount\": 0,\n    \"source_id\": \"\",\n    \"destination_id\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/transact",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"transact"
+							],
+							"query": [
+								{
+									"key": "debug",
+									"value": "true",
+									"description": "Requests that proxy send back debug information about request and response.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Our newest endpoint for transacting, which will eventually replace `/issue`, `/redeem`, and `/transfer`. Must be used to make use of our new ACHNow product, or use instant rails.\n\nhttps://docs.silamoney.com/docs/transact"
+					},
+					"response": []
+				},
+				{
 					"name": "Issue Sila",
 					"event": [
 						{
