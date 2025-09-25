@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "2b6b6005-0bbb-40bd-b9fa-74e07b5ee8d8",
+		"_postman_id": "2262fbf3-f3cc-48bd-ac5e-3d0ebcbd43a8",
 		"name": "Sila API v0.2 -Auth Token",
 		"description": "## Environment Setup\n\nBegin with setting up your environment with the three variables listed below. You can retrieve your app_handle and app_client_id in the [Sila Console](https://console.silamoney.com/). The app_client_secret was provided when creating your app. For more details on how to access this information please visit our [Application Management documents](https://docs.silamoney.com/docs/console-application-management).\n\n- app_handle\n- app_client_id\n- app_client_secret\n    \n\nAfterwards, call the Get Authentication Token endpoint in the Authentication folder to receive access token. Set the return token value to the jwt_token value in the environment. This will enable you to make successful requests for the other Sila Endpoints.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "14557125",
-		"_collection_link": "https://orange-meteor-970737.postman.co/workspace/JWT-app~e3a5530a-142f-4520-abac-9bd6b1362b42/collection/14557125-2b6b6005-0bbb-40bd-b9fa-74e07b5ee8d8?action=share&source=collection_link&creator=14557125"
+		"_collection_link": "https://orange-meteor-970737.postman.co/workspace/sila-postman-auth-git~50caf89f-dd2b-436f-9d38-da24d87ebe93/collection/14557125-2262fbf3-f3cc-48bd-ac5e-3d0ebcbd43a8?action=share&source=collection_link&creator=14557125"
 	},
 	"item": [
 		{
@@ -838,6 +838,138 @@
 					"description": "This folder contains /add, /update, and /delete requests for changing a user's registered data. These endpoints are used to change data that is used in verification.\n\nNote that some data cannot be changed after a verification has already passed or while a verification is still in progress (pending), and that only one SSN or EIN can be added to an entity at a time."
 				},
 				{
+					"name": "Advanced KYC",
+					"item": [
+						{
+							"name": "KYC",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"flow\": \"{{kyc_flow_uuid}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{backend_url}}/0.2/kyc",
+									"host": [
+										"{{backend_url}}"
+									],
+									"path": [
+										"0.2",
+										"kyc"
+									],
+									"query": [
+										{
+											"key": "debug",
+											"value": "true",
+											"description": "Requests that proxy send back debug information about request and response.",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Requests identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Verifications",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{backend_url}}/0.2/get_verifications",
+									"host": [
+										"{{backend_url}}"
+									],
+									"path": [
+										"0.2",
+										"get_verifications"
+									],
+									"query": [
+										{
+											"key": "debug",
+											"value": "true",
+											"description": "Requests that proxy send back debug information about request and response.",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Requests identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Verifications (verification_uuid)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{backend_url}}/0.2/get_verifications/<verification_uuid>",
+									"host": [
+										"{{backend_url}}"
+									],
+									"path": [
+										"0.2",
+										"get_verifications",
+										"<verification_uuid>"
+									],
+									"query": [
+										{
+											"key": "debug",
+											"value": "true",
+											"description": "Requests that proxy send back debug information about request and response.",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Requests identity verification and blockchain address allowlisting for the given user_handle (can belong to an individual or a business).\n\nIf requesting KYB, make sure to use the business private key."
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get Payment Methods",
 					"request": {
 						"method": "POST",
@@ -1384,89 +1516,6 @@
 					"response": []
 				},
 				{
-					"name": "Check KYC App",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"query_app_handle\": \"{{Cross APP handle}}\",\n    \"query_user_handle\": \"{{Cross APP User handle}}\"\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/check_kyc_app",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"check_kyc_app"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Check KYC/KYB Partnered App",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_b_handle}}\"\n    },\n    \"query_app_handle\": \"{{app_handle}}\",\n    \"query_user_handle\": \"{{user_handle}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/check_partner_kyc",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"check_partner_kyc"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Checks status of identity verification allowlisting for the given user_handle (can belong to an individual or a business)."
-					},
-					"response": []
-				},
-				{
 					"name": "Required Document Types",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1736,184 +1785,6 @@
 							"path": [
 								"0.2",
 								"update_account"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Link Token (Plaid)",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"android_package_name\": \"\"\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/plaid_link_token",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"plaid_link_token"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Plaid Same-day Auth",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"account_name\": \"{{bank_account_name}}\"\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/plaid_sameday_auth",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"plaid_sameday_auth"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Link Token (Plaid Update Mode)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"account_name\": \"{{bank_account_name}}\"\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/plaid_update_link_token",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"plaid_update_link_token"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Institutions",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n       \n    },\n     \"search_filters\": {\n        \"page\": 1,\n        \"per_page\": 20,\n        \"institution_name\":\"bank\"\n    }\n\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_institutions",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_institutions"
-							]
-						},
-						"description": "Get Institutions"
-					},
-					"response": []
-				},
-				{
-					"name": "Check InstantACH Enable",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\":{{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"account_name\": \"{{bank_account_name}}\"\n}"
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/check_instant_ach",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"check_instant_ach"
 							],
 							"query": [
 								{
@@ -2293,8 +2164,8 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2578,48 +2449,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Create Test Virtual Account ACH Transaction",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"virtual_account_number\": \"{{virtual_account_number}}\",\n    \"amount\": 1,\n    \"tran_code\": 22,\n    \"effective_date\": \"2021-10-22\",\n    \"entity_name\": \"TEST ENTITY\",\n    \"ced\": \"PAYROLL\",\n    \"ach_name\": \"SILA INC\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/create_test_virtual_account_ach_transaction",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"create_test_virtual_account_ach_transaction"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Simulates receiving an ACH transaction from Evolve which will credit or debit a virtual account with a given amount (in Sila)."
-					},
-					"response": []
 				}
 			]
 		},
@@ -2812,212 +2641,6 @@
 							]
 						},
 						"description": "Retry Webhook"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Virtual Accounts",
-			"item": [
-				{
-					"name": "Get Virtual Accounts",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_virtual_accounts",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_virtual_accounts"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "This endpoint is used for retrieving all of the virtual accounts that are allocated to an end user."
-					},
-					"response": []
-				},
-				{
-					"name": "Open Virtual Account",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"virtual_account_name\": \"{{virtual_account_name}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/open_virtual_account",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"open_virtual_account"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Provisions a new virtual account for the specified user. If a virtual_account_name is specified, this will become the nickname of the new virtual account.\n\nIf the user already has a virtual account with the chosen nickname, the new virtual account will be the selected nickname + 8 random characters.\n\nThe app you are authenticated on must have already been set up for virtual accounts for this endpoint to succeed."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Virtual Account",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"virtual_account_id\": \"{{virtual_account_id}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/get_virtual_account",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"get_virtual_account"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Get a single virutal account that is linked to the user_handle. Returns the virtual account statuses and balance information."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Virtual Account",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"virtual_account_id\" : \"{{virtual_account_id}}\",\n    \"virtual_account_name\" : \"{{virtual_account_name}}\",\n    \"ach_credit_enabled\": \"{{ach_credit_enabled}}\",\n    \"ach_debit_enabled\": \"{{ach_debit_enabled}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/update_virtual_account",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"update_virtual_account"
-							],
-							"query": [
-								{
-									"key": "debug",
-									"value": "true",
-									"description": "Requests that proxy send back debug information about request and response.",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Update a single virtual account by virtual account uuid. Returns information about the updated virtual account."
-					},
-					"response": []
-				},
-				{
-					"name": "Close Virtual Account",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"header\": {\n        \"created\": {{$timestamp}},\n        \"reference\": \"{{$randomUUID}}\",\n        \"app_handle\": \"{{app_handle}}\",\n        \"user_handle\": \"{{user_handle}}\"\n    },\n    \"virtual_account_id\": \"{{user_virtual_account_id}}\",\n    \"account_number\": \"{{user_virtual_account_number}}\"\n\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backend_url}}/0.2/close_virtual_account",
-							"host": [
-								"{{backend_url}}"
-							],
-							"path": [
-								"0.2",
-								"close_virtual_account"
-							]
-						}
 					},
 					"response": []
 				}
@@ -3300,6 +2923,179 @@
 							"path": [
 								"0.2",
 								"create_cko_testing_token"
+							]
+						},
+						"description": "Verify user is able to link card successfully with all valid details."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Capabilities",
+			"item": [
+				{
+					"name": "Check Bank Account Capabilities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": \"{{$randomUUID}}\",\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n    },\n    \"bank_account_id\": \"{{bank_account_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/check_bank_account_capabilities",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"check_bank_account_capabilities"
+							]
+						},
+						"description": "Verify user is able to link card successfully with all valid details."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Card Capabilities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"header\": {\n    \"created\": {{$timestamp}},\n    \"reference\": \"{{$randomUUID}}\",\n    \"app_handle\": \"{{app_handle}}\",\n    \"user_handle\": \"{{user_handle}}\"\n    },\n    \"bin\": \"<6-digit BIN>\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/check_card_capability",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"check_card_capability"
+							]
+						},
+						"description": "Verify user is able to link card successfully with all valid details."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Routing Number Capabilities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"routing_number\": \"123456789\" //required\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend_url}}/0.2/check_routing_number_capabilities",
+							"host": [
+								"{{backend_url}}"
+							],
+							"path": [
+								"0.2",
+								"check_routing_number_capabilities"
 							]
 						},
 						"description": "Verify user is able to link card successfully with all valid details."
